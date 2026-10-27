@@ -1,0 +1,101 @@
+    1  cat /etx/os-release
+    2  ls -a
+    3  id
+    4  clear
+    5  ls -a
+    6  cd ~
+    7  cd ..
+    8  ls -a
+    9  cd /
+   10  cd /etc
+   11  -ls -a
+   12  ls -a
+   13  clear
+   14  sudo -u user1 passwd
+   15  ps -eo pid,ruid,euid,user,comm,args | awk 'NR==1 || ($3 == 0 && $2 != 0)' | tee ~/mephi-linux-security-2026/processes.out
+   16  cat /etc/os-release
+   17  id
+   18  sudo -v
+   19  getent passwd 1234
+   20  getent group students
+   21  sudo groupadd students
+   22  sudo useradd -u 1234 -m -G students -s /bin/bash user1
+   23  sudo passwd user1
+   24  sudo chage -M 90 user1
+   25  id user1
+   26  getent passed user1
+   27  getent passwd user1
+   28  sudo chage -l user1
+   29  mkdir -p ~/mephi-linux-security-2026
+   30  sudo find / -type f -perm -4000 -print 2>/dev/null | sort | tee ~/mephi-linux-security-2026/setuid_files.out
+   31  sudo -u user1 passwd
+   32  cd ~
+   33  ls -a
+   34  pwd
+   35  sudo
+   36  sudo -u user1 passwd
+   37  ps -eo pid,ruid,euid,user,comm,args | awk 'NR==1 || ($3 == 0 && $2 != 0)' | tee ~/mephi-linux-security-2026/processes.out
+   38  sudo -u user1 passwd
+   39  sudo cp /usr/bin/cat /home/user1/mycat
+   40  sudo chown root:root /home/user1/mycat
+   41  sudo chmod 4755 /home/user1/mycat
+   42  ls -l /home/user1/mycat
+   43  sudo ls -l /home/user1/mycat
+   44  sudo -u user1 /home/user1/mycat /etc/shadow >/dev/null && echo 'OK: setuid cat прочитал /etc/shadow'
+   45  command -v setcap
+   46  command -v getcap
+   47  sudo cp /usr/bin/chown /home/user1/mychown
+   48  sudo chown root:root /home/user1/mychown
+   49  sudo chmod 755 /home/user1/mychown
+   50  sudo setcap cap_chown=ep /home/user1/mychown
+   51  sudo getcap /home/user1/mychown | tee ~/mephi-linux-security-2026/getcap.out
+   52  testfile="/tmp/cap-test-dsn004-$(date +%s).txt"
+   53  touch "$testfile"
+   54  ls -l "$testfile"
+   55  sudo -u user1 /home/user1/mychown root:root "$testfile"
+   56  ls -l "$testfile"
+   57  printf '%s\n' 'user1 ALL=(root) /usr/bin/date -s *, /usr/bin/timedatectl set-time *' | sudo tee /etc/sudoers.d/user1-time >/dev/null
+   58  sudo chmod 440 /etc/sudoers.d/user1-time
+   59  sudo visudo -c
+   60  sudo -l -U user1
+   61  clear
+   62  sudo stat /home/user1 > ~/mephi-linux-security-2026/stat.out
+   63  sudo stat /home/user1/mycat >> ~/mephi-linux-security-2026/stat.out
+   64  sudo stat /home/user1/mychown >> ~/mephi-linux-security-2026/stat.out
+   65  sudo cat /etc/passwd > ~/mephi-linux-security-2026/passwd
+   66  sudo cat /etc/group > ~/mephi-linux-security-2026/group
+   67  sudo cat /etc/sudoers > ~/mephi-linux-security-2026/sudoers
+   68  sudo cat /etc/sudoers.d/user1-time > ~/mephi-linux-security-2026/sudoers.d-user1-time
+   69  sudo awk -F: 'BEGIN { OFS=":" } { if ($2 != "" && $2 !~ /^[!*]/) $2="<REDACTED>"; print }' /etc/shadow > ~/mephi-linux-security-2026/shadow
+   70  ls -l ~/mephi-linux-security-2026
+   71  printf 'Уникальный номер: dsn004\n'
+   72  command -v gnome-screenshot
+   73  ls -lt ~/Pictures
+   74  ls -a
+   75  cd /home/student/Изображения/
+   76  pwd
+   77  ls -lt
+   78  ls -lh "$HOME/mephi-linux-security-2026"
+   79  cd ~
+   80  clear
+   81  clean
+   82  clear
+   83  ls -lh "$HOME/mephi-linux-security-2026"
+   84  cat > "$HOME/mephi-linux-security-2026/README.md" <<'EOF'
+# ДЗ №1 — Изучение средств защиты ОС GNU/Linux
+
+Среда: РЕД ОС 8.0.3 в Oracle VirtualBox.
+
+| Раздел | Результат | Артефакты |
+|---|---|---|
+| 1. Пользователь | `user1`, UID 1234; включён в `students`; максимальный срок действия пароля — 90 дней | `passwd`, `group`, `shadow` |
+| 2. Мониторинг | Найдены setuid-файлы; зафиксирован `passwd` с RUID 1234 и EUID 0 | `setuid_files.out`, `processes.out` |
+| 3. setuid | Для `/home/user1/mycat` установлены владелец `root:root` и права `4755`; чтение `/etc/shadow` проверено от имени `user1` | `stat.out`, `history.out` |
+| 4. Capabilities | Для `/home/user1/mychown` установлена `cap_chown=ep`; проверена смена владельца файла | `getcap.out`, `stat.out` |
+| 5. sudo | В `/etc/sudoers.d/user1-time` разрешены команды для изменения системного времени; конфигурация проверена `visudo` и `sudo -l` | `sudoers`, `sudoers.d-user1-time` |
+| 6. Визуальное подтверждение | На скриншоте показан уникальный номер `dsn004` | `mephi-screenshot.png` |
+
+Хеши паролей в файле `shadow` замаскированы перед публикацией в публичном репозитории.
+EOF
+
+   85  history > "$HOME/mephi-linux-security-2026/history.out"
