@@ -9,6 +9,6 @@
 | 3. setuid | Для `/home/user1/mycat` установлены владелец `root:root` и права `4755`; чтение `/etc/shadow` проверено от имени `user1` | `stat.out`, `history.out` |
 | 4. Capabilities | Для `/home/user1/mychown` установлена `cap_chown=ep`; проверена смена владельца файла | `getcap.out`, `stat.out` |
 | 5. sudo | В `/etc/sudoers.d/user1-time` разрешены команды для изменения системного времени; конфигурация проверена `visudo` и `sudo -l` | `sudoers`, `sudoers.d-user1-time` |
-| 6. Визуальное подтверждение | На скриншоте показан уникальный номер `dsn004` | `mephi-screenshot.png` |
+| 6. Визуальное подтверждение | На скриншоте показан уникальный номер `375740` | `mephi-screenshot.png` |
 
 Хеши паролей в файле `shadow` замаскированы перед публикацией в публичном репозитории.
